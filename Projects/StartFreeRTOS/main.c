@@ -66,11 +66,8 @@ void vApplicationMallocFailedHook (void){
 	while(1);
 }
 
-// Main function
-int main(void){
-
-/******************** System Configuration ********************/
-
+void system_config(){
+	/******************** System Configuration ********************/
 	// Set clock to 40 MHz (200 MHz from PLL with divider of 5)
 	ROM_SysCtlClockSet(SYSCTL_SYSDIV_5 | SYSCTL_USE_PLL | SYSCTL_XTAL_16MHZ | SYSCTL_OSC_MAIN);	//
 
@@ -109,9 +106,14 @@ int main(void){
 	SysCtlPeripheralSleepEnable(RED_TIMER_PERIPH);	// BLUE_TIMER_PERIPH y GREEN_TIMER_PERIPH are the same
 
 	// Configure LEDs in GPIO mode
-    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3);
+	ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3);
+	/******************** System Configuration ********************/
+}
 
-/******************** System Configuration ********************/
+// Main function
+int main(void){
+
+	system_config();
 
     // Little Test
     GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1|GPIO_PIN_2, 255);
