@@ -142,46 +142,6 @@ void QTivaRPC::processIncommingSerialData()
                     }
                         break;
 
-                    case COMMAND_SENSOR_READ:
-                    {
-                        PARAMETERS_SENSOR_READ parametro;
-
-                        if (check_and_extract_command_param(ptrtoparam, tam, sizeof(parametro),&parametro)>0){
-                            emit IncommingSensorData(parametro);
-                        }
-                    }
-                        break;
-
-                    case COMMAND_PROXIMITY_SENSOR:
-                    {
-                        PARAMETERS_PROXIMITY_SENSOR parametro;
-                        if (check_and_extract_command_param(ptrtoparam, tam, sizeof(parametro),&parametro)>0){
-                            emit IncommingProximitySensorData(parametro);
-                        }
-
-                    }
-                        break;
-
-                    case COMMAND_GESTURE_SENSOR:
-                    {
-                        PARAMETERS_GESTURE_SENSOR parametro;
-                        if (check_and_extract_command_param(ptrtoparam, tam, sizeof(parametro),&parametro)>0){
-                            emit IncommingGestureSensorData(parametro);
-                        }
-
-                    }
-                        break;
-
-                    case COMMAND_GESTURE_SENSOR2:
-                    {
-                        PARAMETERS_GESTURE_SENSOR2 parametro;
-                        if (check_and_extract_command_param(ptrtoparam, tam, sizeof(parametro),&parametro)>0){
-                            emit IncommingGestureSensorData2(parametro);
-                        }
-
-                    }
-                        break;
-
                     case COMMAND_REJECTED:
                     {
                         // En otros comandos hay que extraer los parametros de la trama y copiarlos
@@ -511,57 +471,3 @@ void QTivaRPC::ADCResolutionSend(bool res){
 
 }
 
-void QTivaRPC::SensorRead(){
-
-    uint8_t pui8Frame[MAX_FRAME_SIZE];
-    int size;
-    if(connected)
-    {
-        // Se crea la trama con n de secuencia 0; comando COMANDO_LEDS; se le pasa la
-        // estructura de parametros, indicando su tamaño; el nº final es el tamaño maximo
-        // de trama
-        size=create_frame((uint8_t *)pui8Frame, COMMAND_SENSOR_READ, NULL, 0, MAX_FRAME_SIZE);
-        // Se se pudo crear correctamente, se envia la trama
-        if (size>0) serial.write((char *)pui8Frame,size);
-    }
-
-
-}
-
-void QTivaRPC::ProximitySensorChangeState(bool state)
-{
-    PARAMETERS_PROXIMITY_SENSOR_STATE parametro;
-    uint8_t pui8Frame[MAX_FRAME_SIZE];
-    int size;
-
-    if(connected)
-    {
-        // Se rellenan los parametros
-        parametro.state=state;
-        // Se crea la trama con n de secuencia 0; comando COMANDO_LEDS; se le pasa la
-        // estructura de parametros, indicando su tamaño; el nº final es el tamaño maximo
-        // de trama
-        size=create_frame((uint8_t *)pui8Frame, COMMAND_PROXIMITY_SENSOR_STATE, &parametro, sizeof(parametro), MAX_FRAME_SIZE);
-        // Se se pudo crear correctamente, se envia la trama
-        if (size>0) serial.write((char *)pui8Frame,size);
-    }
-}
-
-void QTivaRPC::SensorProximitySend(int value){
-
-    PARAMETERS_PROXIMITY_SENSOR parametro;
-    uint8_t pui8Frame[MAX_FRAME_SIZE];
-    int size;
-    if(connected)
-    {
-        // Se rellenan los parametros del paquete (en este caso, el brillo)
-        parametro.value=(uint8_t)value;
-        // Se crea la trama con n de secuencia 0; comando COMANDO_LEDS; se le pasa la
-        // estructura de parametros, indicando su tamaño; el nº final es el tamaño maximo
-        // de trama
-        size=create_frame((uint8_t *)pui8Frame, COMMAND_PROXIMITY_SENSOR, &parametro, sizeof(parametro), MAX_FRAME_SIZE);
-        // Se se pudo crear correctamente, se envia la trama
-        if (size>0) serial.write((char *)pui8Frame,size);
-    }
-
-}

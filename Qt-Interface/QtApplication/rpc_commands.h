@@ -23,13 +23,9 @@ typedef enum {
     COMMAND_SWITCH_ADC,
     COMMAND_ADC_FREQUENCY,
     COMMAND_ADC_RESOLUTION,
-    COMMAND_SENSOR_READ,
-    COMMAND_PROXIMITY_SENSOR_STATE,
-    COMMAND_PROXIMITY_SENSOR,
-    COMMAND_GESTURE_SENSOR,
-    COMMAND_GESTURE_SENSOR2,
 
-    //etc, etc...
+
+    //...
 } commandTypes;
 
 //Estructuras relacionadas con los parametros de los comandos. El estuadiante debera crear las

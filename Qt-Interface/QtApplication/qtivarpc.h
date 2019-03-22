@@ -61,9 +61,6 @@ public slots:
     void switchADC(bool active);
     void ADCFrequencySend(double freq);
     void ADCResolutionSend(bool res);
-    void SensorRead();
-    void SensorProximitySend(int value);
-    void ProximitySensorChangeState(bool state);
 
 private slots:
     void processIncommingSerialData(); //Este Slot se conecta a la señal readyRead(..) del puerto serie. Se encarga de procesar y decodificar los mensajes que llegan de la TIVA y

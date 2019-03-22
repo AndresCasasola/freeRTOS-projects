@@ -65,12 +65,6 @@ MainUserGUI::MainUserGUI(QWidget *parent) :  // Constructor de la clase
     connect(&tiva,SIGNAL(ADC12SampleReceived(PARAMETERS_ADC12_PACKET)),this,SLOT(ADC12SampleShow(PARAMETERS_ADC12_PACKET)));
     connect(ui->ADCCheck,SIGNAL(toggled(bool)),&tiva,SLOT(switchADC(bool)));
 
-    //SENSOR. ESPECIFICACION 3
-    connect(&tiva,SIGNAL(IncommingSensorData(PARAMETERS_SENSOR_READ)),this,SLOT(SensorDataShow(PARAMETERS_SENSOR_READ)));
-    connect(&tiva,SIGNAL(IncommingProximitySensorData(PARAMETERS_PROXIMITY_SENSOR)),this,SLOT(ProximitySensorDataShow(PARAMETERS_PROXIMITY_SENSOR)));
-    connect(&tiva,SIGNAL(IncommingGestureSensorData(PARAMETERS_GESTURE_SENSOR)),this,SLOT(GestureSensorDataShow(PARAMETERS_GESTURE_SENSOR)));
-    connect(&tiva,SIGNAL(IncommingGestureSensorData2(PARAMETERS_GESTURE_SENSOR2)),this,SLOT(GestureSensorDataShow2(PARAMETERS_GESTURE_SENSOR2)));
-
     //Semana 2. Inicializacion GRAFICA
     ui->Grafica->setTitle("Osciloscopio"); // Titulo de la grafica
     ui->Grafica->setAxisTitle(QwtPlot::xBottom, "Muestras"); // Etiqueta eje X de coordenadas
@@ -376,93 +370,4 @@ void MainUserGUI::on_checkBox_clicked(bool checked)
    tiva.ADCResolutionSend(checked);
 }
 
-void MainUserGUI::on_sensor_lumin_clicked()
-{
-    tiva.SensorRead();
-}
 
-void MainUserGUI::SensorDataShow(PARAMETERS_SENSOR_READ parametro){
-
-    QColor col;
-    int total = parametro.b + parametro.r + parametro.g+1;
-    col.setBlue(parametro.b*255/total);
-    col.setGreen(parametro.g*255/total);
-    col.setRed(parametro.r*255/total);
-
-    ui->intensidad->display(parametro.c);
-    ui->color->setColor(col);
-
-}
-
-void MainUserGUI::on_horizontalSlider_sliderMoved(int position)
-{
-    ui->distance->display(position);
-    tiva.SensorProximitySend(position);
-}
-
-void MainUserGUI::on_checkBox_2_clicked(bool checked)
-{
-    tiva.ProximitySensorChangeState(checked);
-}
-
-void MainUserGUI::ProximitySensorDataShow(PARAMETERS_PROXIMITY_SENSOR parametro){
-
-    ui->distance_2->display(parametro.value);
-    ui->color_2->setChecked(parametro.state);
-}
-
-void MainUserGUI::GestureSensorDataShow(PARAMETERS_GESTURE_SENSOR parametro){
-
-    ui->up->setChecked(0);
-    ui->down->setChecked(0);
-    ui->left->setChecked(0);
-    ui->right->setChecked(0);
-    ui->near->setChecked(0);
-    ui->far->setChecked(0);
-
-    switch(parametro.mode){
-
-        case 1: ui->left->setChecked(1);
-                break;
-        case 2: ui->right->setChecked(1);
-            break;
-        case 3: ui->up->setChecked(1);
-            break;
-        case 4: ui->down->setChecked(1);
-            break;
-        case 5: ui->near->setChecked(1);
-            break;
-        case 6: ui->far->setChecked(1);
-            break;
-        case 7:
-                ui->left->setChecked(1);
-                ui->right->setChecked(1);
-                ui->up->setChecked(1);
-                ui->down->setChecked(1);
-                ui->near->setChecked(1);
-                ui->far->setChecked(1);
-            break;
-        default:
-            break;
-    }
-
-}
-
-void MainUserGUI::GestureSensorDataShow2(PARAMETERS_GESTURE_SENSOR2 parametro){
-
-    for(int i=0;i<(parametro.bytes_read/4);i++){
-        yVal2[0][i]=parametro.fifo[4*i];
-        yVal2[1][i]=parametro.fifo[(4*i)+1];
-        yVal2[2][i]=parametro.fifo[(4*i)+2];
-        yVal2[3][i]=parametro.fifo[(4*i)+3];
-    }
-
-//    for(int i=0;i<(parametro.bytes_read/4);i++){
-//        yVal2[0][(1000-parametro.bytes_read/4)+i]=((double)parametro.fifo[4*i]);
-//        yVal2[1][(1000-parametro.bytes_read/4)+i]=((double)parametro.fifo[(4*i)+1]);
-//        yVal2[2][(1000-parametro.bytes_read/4)+i]=((double)parametro.fifo[(4*i)+2]);
-//        yVal2[3][(1000-parametro.bytes_read/4)+i]=((double)parametro.fifo[(4*i)+3]);
-//    }
-
-    ui->Grafica_2->replot();
-}

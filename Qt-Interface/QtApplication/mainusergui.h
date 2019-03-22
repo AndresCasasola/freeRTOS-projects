@@ -43,13 +43,6 @@ private slots:
     void ADC12SampleShow(PARAMETERS_ADC12_PACKET parametro);
     void on_ADCFrequency_valueChanged(double value);
     void on_checkBox_clicked(bool checked);
-    void on_sensor_lumin_clicked();
-    void SensorDataShow(PARAMETERS_SENSOR_READ parametro);
-    void on_checkBox_2_clicked(bool checked);
-    void on_horizontalSlider_sliderMoved(int position);
-    void ProximitySensorDataShow(PARAMETERS_PROXIMITY_SENSOR parametro);
-    void GestureSensorDataShow(PARAMETERS_GESTURE_SENSOR parametro);
-    void GestureSensorDataShow2(PARAMETERS_GESTURE_SENSOR2 parametro);
 
 private:
     // funciones privadas
