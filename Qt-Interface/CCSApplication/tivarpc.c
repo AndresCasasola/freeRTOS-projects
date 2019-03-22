@@ -55,6 +55,15 @@ portTASK_FUNCTION(ADCTask,pvParameters)
     PARAMETERS_ADC12_PACKET parameter12;
     int i;
 
+    // Configure ADC Timer for 1000Hz the first time
+    TimerDisable(TIMER5_BASE, TIMER_A);
+    ADCIntDisable(ADC0_BASE,ADC_INT_SS1);
+    uint32_t ui32Period = (uint32_t) ( (SysCtlClockGet() / (uint32_t) 1000) );
+    TimerLoadSet(TIMER5_BASE, TIMER_A, ui32Period -1);
+    TimerEnable(TIMER5_BASE, TIMER_A);
+    ADCIntClear(ADC0_BASE, ADC_INT_SS1);
+    ADCIntEnable(ADC0_BASE,ADC_INT_SS1);
+
     // Bucle infinito, las tareas en FreeRTOS no pueden "acabar", deben "matarse" con la funcion xTaskDelete().
     while(1)
     {
