@@ -1,42 +1,32 @@
-//*****************************************************************************
-//
-// commands.c - FreeRTOS porting example on CCS4
-//
-// Este fichero contiene errores que seran explicados en clase
-//
-//*****************************************************************************
+/*
+*	FreeRTOS USB Command Line
+*/
 
 
 #include <stdbool.h>
 #include <stdint.h>
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-
 /* FreeRTOS includes */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
 #include "semphr.h"
-
 /* Standard TIVA includes */
 #include "inc/hw_memmap.h"
 #include "inc/hw_sysctl.h"
 #include "inc/hw_types.h"
-
 #include "driverlib/debug.h"
 #include "driverlib/gpio.h"
 #include "driverlib/uart.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/rom.h"
-
 /* Other TIVA includes */
 #include "utils/cpu_usage.h"
 #include "utils/cmdline.h"
 #include "utils/uartstdio.h"
-
 #include "drivers/rgb.h"
 
 // ==============================================================================
@@ -45,36 +35,30 @@
 extern uint32_t g_ui32CPUUsage;
 
 // ==============================================================================
-// Implementa el comando cpu que muestra el uso de CPU
+// Show CPU use
 // ==============================================================================
 int  Cmd_cpu(int argc, char *argv[])
 {
-    //
-    // Print some header text.
-    //
     UARTprintf("ARM Cortex-M4F %u MHz - ",SysCtlClockGet() / 1000000);
-    UARTprintf("%2u%% de uso\n", (g_ui32CPUUsage+32768) >> 16);
+    UARTprintf("%2u%% in use\n", (g_ui32CPUUsage+32768) >> 16);
 
     // Return success.
     return(0);
 }
 
 // ==============================================================================
-// Implementa el comando free, que muestra cuanta memoria "heap" le queda al FreeRTOS
+// Show free heap memory in freeRTOS system
 // ==============================================================================
 int Cmd_free(int argc, char *argv[])
 {
-    //
-    // Print some header text.
-    //
-    UARTprintf("%d bytes libres\n", xPortGetFreeHeapSize());
+    UARTprintf("%d free bytes\n", xPortGetFreeHeapSize());
 
     // Return success.
     return(0);
 }
 
 // ==============================================================================
-// Implementa el comando task. S�lo es posible si la opci�n configUSE_TRACE_FACILITY de FreeRTOS est� habilitada
+// Only possible if configUSE_TRACE_FACILITY option is enabled
 // ==============================================================================
 #if ( configUSE_TRACE_FACILITY == 1 )
 
@@ -109,16 +93,15 @@ int Cmd_tasks(int argc, char *argv[])
 
 #if configGENERATE_RUN_TIME_STATS
 // ==============================================================================
-// Implementa el comando "Stats"
+// Stats command
 // ==============================================================================
 Cmd_stats(int argc, char *argv[])
 {
-	char*	pBuffer;
-
+	char* pBuffer;
 	pBuffer = pvPortMalloc(1024);
 	if (pBuffer)
 	{
-		vTaskGetRunTimeStats(pBuffer); //Es un poco inseguro, pero por ahora nos vale...
+		vTaskGetRunTimeStats(pBuffer); // That line is not sure... But can be used at the moment...
 		UARTprintf("TaskName\tCycles\t\tPercent\r\n");
 		UARTprintf("===============================================\r\n");
 		UARTprintf("%s", pBuffer);
@@ -129,119 +112,103 @@ Cmd_stats(int argc, char *argv[])
 #endif
 
 // ==============================================================================
-// Implementa el comando help
+// Show available commands
 // ==============================================================================
 int Cmd_help(int argc, char *argv[])
 {
     tCmdLineEntry *pEntry;
 
-    //
-    // Print some header text.
-    //
-    UARTprintf("Comandos disponibles\n");
-    UARTprintf("------------------\n");
+    UARTprintf("  -------------------------------------------------------\n");
+    UARTprintf("  |  Available commands:                                |\n");
+    UARTprintf("  -------------------------------------------------------\n");
 
-    //
     // Point at the beginning of the command table.
-    //
     pEntry = &g_psCmdTable[0];
 
-    //
-    // Enter a loop to read each entry from the command table.  The end of the
+    // Enter a loop to read each entry from the command table. The end of the
     // table has been reached when the command name is NULL.
-    //
     while(pEntry->pcCmd)
     {
-        //
         // Print the command name and the brief description.
-        //
-        UARTprintf("%s%s\n", pEntry->pcCmd, pEntry->pcHelp);
+        UARTprintf("  - %s%s\n", pEntry->pcCmd, pEntry->pcHelp);
 
-        //
         // Advance to the next entry in the table.
-        //
         pEntry++;
     }
 
-    //
+    UARTprintf("  -------------------------------------------------------\n");
     // Return success.
-    //
     return(0);
 }
 
 // ==============================================================================
-// Implementa el comando "LED"
+// Digital LED control
 // ==============================================================================
 int Cmd_led(int argc, char *argv[])
 {
 	if (argc != 2)
 	{
-		//Si los parametros no son suficientes o son demasiados, muestro la ayuda
-		UARTprintf(" led [on|off]\n");
+		// Show correct syntax (No enough parameters)
+		UARTprintf("Correct syntax: led [on|off]\n");
 	}
 	else
 	{
 		//seconds = strtoul(argv[1], NULL, 10);
 
-		if (0==strncmp( argv[1], "on",2))
+		if (strncmp( argv[1], "on",2) == 0)
 		{
-			UARTprintf("Enciendo el LED\n");
+			UARTprintf("Turn on LED\n");
 			GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3,GPIO_PIN_3);
 		}
-		else if (0==strncmp( argv[1], "off",3))
+		else if (strncmp( argv[1], "off",3) == 0)
 		{
-			UARTprintf("Apago el LED\n");
+			UARTprintf("Turn off LED\n");
 			GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_3,0);
 		}
 		else
 		{
-			//Si el parametro no es correcto, muestro la ayuda
-			UARTprintf(" led [on|off]\n");
+
+			// Show correct syntax (Wrong parameter)
+			UARTprintf("Correct syntax: led [on|off]\n");
 		}
-
 	}
-
-
     return 0;
 }
 
-
 // ==============================================================================
-// Implementa el comando "MODE"
+// Select LEDs mode (GPIO / PWM)
 // ==============================================================================
 int Cmd_mode(int argc, char *argv[])
 {
 	if (argc != 2)
 	{
-		//Si los parametros no son suficientes o son demasiados, muestro la ayuda
-		UARTprintf(" mode [gpio|pwm]\n");
+		// Show correct syntax (No enough parameters)
+		UARTprintf("Correct syntax: mode [gpio|pwm]\n");
 	}
 	else
 	{
-		if (0==strncmp( argv[1], "gpio",4))
+		if (strncmp(argv[1], "gpio",4) == 0)
 		{
-			UARTprintf("cambio a modo GPIO\n");
+			UARTprintf("Leds changed to GPIO mode\n");
 			RGBDisable();
 			ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3);
 		}
-		else if (0==strncmp( argv[1], "pwm",3))
+		else if (strncmp(argv[1], "pwm",3) == 0)
 		{
-			UARTprintf("Cambio a modo PWM (rgb)\n");
+			UARTprintf("Leds changed to PWM mode\n");
 			RGBEnable();
 		}
 		else
 		{
-			//Si el parametro no es correcto, muestro la ayuda
-			UARTprintf(" mode [gpio|pwm]\n");
+			// Show correct syntax (Wrong parameter)
+			UARTprintf("Correct syntax: mode [gpio|pwm]\n");
 		}
 	}
-
-
     return 0;
 }
 
 // ==============================================================================
-// Implementa el comando "RGB"
+// Select RGB values to LEDs in PWM mode
 // ==============================================================================
 int Cmd_rgb(int argc, char *argv[])
 {
@@ -249,28 +216,23 @@ int Cmd_rgb(int argc, char *argv[])
 
 	if (argc != 4)
 	{
-		//Si los par�metros no son suficientes, muestro la ayuda
-		UARTprintf(" rgb [red] [green] [blue]\n");
+		// Show correct syntax (No enough parameters)
+		UARTprintf("Correct syntax: rgb [red] [green] [blue]\n");
 	}
 	else
 	{
-
 		arrayRGB[0]=strtoul(argv[1], NULL, 10)<<8;
 		arrayRGB[1]=strtoul(argv[2], NULL, 10)<<8;
 		arrayRGB[2]=strtoul(argv[3], NULL, 10)<<8;
 
 		if ((arrayRGB[0]>=65535)||(arrayRGB[1]>=65535)||(arrayRGB[2]>=65535))
 		{
-
 			UARTprintf(" \n");
 		}
 		else{
 			RGBColorSet(arrayRGB);
 		}
-
 	}
-	
-    
     return 0;
 }
 
@@ -278,28 +240,29 @@ int Cmd_rgb(int argc, char *argv[])
 
 
 // ==============================================================================
-// Tabla con los comandos y su descripcion. Si quiero anadir alguno, debo hacerlo aqui
+// Commands table with definitions
 // ==============================================================================
 tCmdLineEntry g_psCmdTable[] =
 {
-    { "help",     Cmd_help,      "     : Lista de comandos" },
-    { "?",        Cmd_help,      "        : lo mismo que help" },
-    { "cpu",      Cmd_cpu,       "      : Muestra el uso de  CPU " },
-    { "led",  	  Cmd_led,       "      : Apaga y enciende el led verde" },
-    { "mode",  	  Cmd_mode,       "      : Cambia los pines PF1, PF2 y PF3 entre modo GPIO y modo PWM (rgb)" },
-    { "rgb",  	  Cmd_rgb,       "      : Establece el color RGB" },
-    { "free",     Cmd_free,      "     : Muestra la memoria libre" },
-#if ( configUSE_TRACE_FACILITY == 1 )
-	{ "tasks",    Cmd_tasks,     "    : Muestra informacion de las tareas" },
+    { "help",     Cmd_help,      "       Show available commands" },
+    { "cpu",      Cmd_cpu,       "        Show CPU use " },
+    { "led",      Cmd_led,       "        Set GPIO value of leds" },
+    { "mode",  	  Cmd_mode,      "       Set LEDs mode (GPIO / PWM)" },
+    { "rgb",  	  Cmd_rgb,       "        Set RGB values to LEDs in PWM mode" },
+    { "free",     Cmd_free,      "       Show free heap memory in freeRTOS system" },
+
+	#if ( configUSE_TRACE_FACILITY == 1 )
+	{ "tasks",    Cmd_tasks,     "      Show tasks information" },
 #endif
 #if (configGENERATE_RUN_TIME_STATS)
-	{ "stats",    Cmd_stats,      "     : Muestra estadisticas de las tareas" },
+	{ "stats",    Cmd_stats,     "      Show tasks statistics" },
 #endif
-    { 0, 0, 0 }
+
+	{ 0, 0, 0 }
 };
 
 // ==============================================================================
-// Tarea UARTTask.  Espera la llegada de comandos por el puerto serie y los ejecuta al recibirlos...
+// Waits for incoming commands by serial port and executes them when arrives
 // ==============================================================================
 //extern xSemaphoreHandle g_xRxLineSemaphore;
 void UARTStdioIntHandler(void);
@@ -309,18 +272,15 @@ void vUARTTask( void *pvParameters )
     char    pcCmdBuf[64];
     int32_t i32Status;
 	
-    //
-    // Mensaje de bienvenida inicial.
-    //
-    UARTprintf("\n Welcome to Tiva USB Command line\n");
-	UARTprintf(" FreeRTOS %s \n",tskKERNEL_VERSION_NUMBER);
-	UARTprintf(" Type ""?"" for help \n");
-	UARTprintf("> ");    
+    // Welcome message
+    UARTprintf("\n        Welcome to FreeRTOS USB Command Line\n");
+	//UARTprintf("        FreeRTOS %s \n",tskKERNEL_VERSION_NUMBER);
+	UARTprintf("        Type help to show available commands\n\n");
+	UARTprintf("> ");
 
 	/* Loop forever */
 	while (1)
 	{
-
 		/* Read data from the UART and process the command line */
 		UARTgets(pcCmdBuf, sizeof(pcCmdBuf));
 		if (strlen(pcCmdBuf) == 0)
@@ -329,38 +289,28 @@ void vUARTTask( void *pvParameters )
 			continue;
 		}
 
-		//
-		// Pass the line from the user to the command processor.  It will be
-		// parsed and valid commands executed.
-		//
+		// Pass the line from the user to the command processor. It will be
+		// parsed and valid commands executed
 		i32Status = CmdLineProcess(pcCmdBuf);
 
-		//
-		// Handle the case of bad command.
-		//
+		// Handle the case of bad command
 		if(i32Status == CMDLINE_BAD_CMD)
 		{
-			UARTprintf("Comando erroneo!\n");	//No pongo acentos adrede
+			UARTprintf("(!)Wrong command\n");
 		}
 
-		//
 		// Handle the case of too many arguments.
-		//
 		else if(i32Status == CMDLINE_TOO_MANY_ARGS)
 		{
-			UARTprintf("El interprete de comandos no admite tantos parametros\n");	//El maximo, CMDLINE_MAX_ARGS, esta definido en cmdline.c
+			UARTprintf("(!)Too much parameters\n");	//El maximo, CMDLINE_MAX_ARGS, esta definido en cmdline.c
 		}
 
-		//
-		// Otherwise the command was executed.  Print the error code if one was
-		// returned.
-		//
+		// Otherwise the command was executed. Print the error code if one was
+		// returned
 		else if(i32Status != 0)
 		{
-			UARTprintf("El comando devolvio el error %d\n",i32Status);
+			UARTprintf("(!)The command returns the error: %d\n",i32Status);
 		}
-
 		UARTprintf("> ");
-
 	}
 }
