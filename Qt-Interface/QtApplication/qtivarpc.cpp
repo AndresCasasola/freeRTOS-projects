@@ -197,12 +197,11 @@ void QTivaRPC::processIncommingSerialData()
 // Si la conexion no es correcta, se generan señales de error.
 void QTivaRPC::startRPCClient(QString puerto)
 {
-    if (serial.portName() != puerto) {
         serial.close();
         serial.setPortName(puerto);
 
         if (!serial.open(QIODevice::ReadWrite)) {
-            LastError=QString("No puedo abrir el puerto %1, error code %2")
+            LastError=QString("Can not open %1, error code %2")
                          .arg(serial.portName()).arg(serial.error());
 
             emit statusChanged(QTivaRPC::OpenPortError,LastError);
@@ -210,7 +209,7 @@ void QTivaRPC::startRPCClient(QString puerto)
         }
 
         if (!serial.setBaudRate(9600)) {
-            LastError=QString("No puedo establecer tasa de 9600bps en el puerto %1, error code %2")
+            LastError=QString("Can not establish 9600bps on %1, error code %2")
                          .arg(serial.portName()).arg(serial.error());
 
             emit statusChanged(QTivaRPC::BaudRateError,LastError);
@@ -218,7 +217,7 @@ void QTivaRPC::startRPCClient(QString puerto)
         }
 
         if (!serial.setDataBits(QSerialPort::Data8)) {
-            LastError=QString("No puedo establecer 8bits de datos en el puerto %1, error code %2")
+            LastError=QString("Can not establish 8 bits of data on %1, error code %2")
                          .arg(serial.portName()).arg(serial.error());
 
 
@@ -227,7 +226,7 @@ void QTivaRPC::startRPCClient(QString puerto)
         }
 
         if (!serial.setParity(QSerialPort::NoParity)) {
-            LastError=QString("NO puedo establecer parida en el puerto %1, error code %2")
+            LastError=QString("Can not establish parity on %1, error code %2")
                          .arg(serial.portName()).arg(serial.error());
 
             emit statusChanged(QTivaRPC::ParityError,LastError);
@@ -235,19 +234,18 @@ void QTivaRPC::startRPCClient(QString puerto)
         }
 
         if (!serial.setStopBits(QSerialPort::OneStop)) {
-            LastError=QString("No puedo establecer 1bitStop en el puerto %1, error code %2")
+            LastError=QString("Can not establish 1 bitStop on %1, error code %2")
                          .arg(serial.portName()).arg(serial.error());
             emit statusChanged(QTivaRPC::StopError,LastError);
             return;
         }
 
         if (!serial.setFlowControl(QSerialPort::NoFlowControl)) {
-            LastError=QString("No puedo establecer el control de flujo en el puerto %1, error code %2")
+            LastError=QString("Can not establish flow control on %1, error code %2")
                          .arg(serial.portName()).arg(serial.error());
              emit statusChanged(QTivaRPC::FlowControlError,LastError);
             return;
         }
-    }
 
      emit statusChanged(QTivaRPC::TivaConnected,QString(""));
 

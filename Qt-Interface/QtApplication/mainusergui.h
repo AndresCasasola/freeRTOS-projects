@@ -1,6 +1,7 @@
 #ifndef MAINUSERGUI_H
 #define MAINUSERGUI_H
 
+#include <unistd.h>
 #include <QWidget>
 #include <QtSerialPort/qserialport.h>
 #include <QMessageBox>

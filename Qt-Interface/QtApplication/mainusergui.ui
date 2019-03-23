@@ -68,11 +68,11 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>Tab 1</string>
+     <string>Basics</string>
     </attribute>
     <widget class="QSplitter" name="splitter_3">
      <property name="geometry">
@@ -278,7 +278,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Estado:</string>
+      <string>State:</string>
      </property>
     </widget>
     <widget class="QLabel" name="statusLabel">
@@ -291,7 +291,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Detenido</string>
+      <string>Sleeping</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_3">
@@ -308,9 +308,9 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_2">
+   <widget class="QWidget" name="Tab2">
     <attribute name="title">
-     <string>Tab 2</string>
+     <string>ADC</string>
     </attribute>
     <widget class="QwtPlot" name="Grafica">
      <property name="geometry">
@@ -538,191 +538,6 @@
      </property>
      <property name="text">
       <string>Unchecked: 12 bits</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tab_3">
-    <attribute name="title">
-     <string>Tab 3</string>
-    </attribute>
-    <widget class="QPushButton" name="sensor_lumin">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>111</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Brillo y Color</string>
-     </property>
-    </widget>
-    <widget class="Led" name="color">
-     <property name="geometry">
-      <rect>
-       <x>70</x>
-       <y>60</y>
-       <width>51</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string>Color Led component</string>
-     </property>
-     <property name="whatsThis">
-      <string>Led indicator</string>
-     </property>
-     <property name="color">
-      <color>
-       <red>46</red>
-       <green>52</green>
-       <blue>54</blue>
-      </color>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="intensidad">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>120</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="Led" name="color_2">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>80</y>
-       <width>51</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="toolTip">
-      <string>Color Led component</string>
-     </property>
-     <property name="whatsThis">
-      <string>Led indicator</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-     <property name="color">
-      <color>
-       <red>239</red>
-       <green>41</green>
-       <blue>41</blue>
-      </color>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_13">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>20</y>
-       <width>121</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Sensor Proximidad</string>
-     </property>
-    </widget>
-    <widget class="QSlider" name="horizontalSlider">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>200</y>
-       <width>160</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="maximum">
-      <number>255</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="distance">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>140</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBox_2">
-     <property name="geometry">
-      <rect>
-       <x>262</x>
-       <y>47</y>
-       <width>141</width>
-       <height>26</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Modo 1 / Modo 2</string>
-     </property>
-    </widget>
-    <widget class="QLCDNumber" name="distance_2">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>290</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_14">
-     <property name="geometry">
-      <rect>
-       <x>240</x>
-       <y>260</y>
-       <width>121</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Distancia medida</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tab_4">
-    <attribute name="title">
-     <string>Tab 4</string>
-    </attribute>
-    <widget class="QwtPlot" name="Grafica_2">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>30</y>
-       <width>651</width>
-       <height>251</height>
-      </rect>
-     </property>
-     <property name="canvasBackground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>46</red>
-        <green>52</green>
-        <blue>54</blue>
-       </color>
-      </brush>
      </property>
     </widget>
    </widget>

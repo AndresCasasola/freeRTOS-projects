@@ -101,42 +101,6 @@ MainUserGUI::MainUserGUI(QWidget *parent) :  // Constructor de la clase
     ui->Grafica->setAutoReplot(false); //Desactiva el autoreplot (mejora la eficiencia)
     //Semana 2. FIN Inicializacion GRAFICA
 
-    //Inicializacion GRAFICA de GESTOS
-    ui->Grafica_2->setTitle("Gestos"); // Titulo de la grafica
-    ui->Grafica_2->setAxisTitle(QwtPlot::xBottom, "Tiempo"); // Etiqueta eje X de coordenadas
-    ui->Grafica_2->setAxisTitle(QwtPlot::yLeft, "Valor");    // Etiqueta eje Y de coordenadas
-    //ui->Grafica->axisAutoScale(true); // Con Autoescala
-    ui->Grafica_2->setAxisScale(QwtPlot::yLeft, 0, 256); // Escala fija
-    ui->Grafica_2->setAxisScale(QwtPlot::xBottom,0,32);
-
-    // Formateo de la curva
-    for(int i=0;i<4;i++){
-    Channels2[i] = new QwtPlotCurve();
-    Channels2[i]->attach(ui->Grafica_2);
-    }
-
-    //Inicializacion de los valores básicos
-    for(int i=0;i<32;i++){
-        xVal2[i]=i;
-        yVal2[0][i]=0;
-        yVal2[1][i]=0;
-        yVal2[2][i]=0;
-        yVal2[3][i]=0;
-    }
-    Channels2[0]->setRawSamples(xVal2,yVal2[0],32);
-    Channels2[1]->setRawSamples(xVal2,yVal2[1],32);
-    Channels2[2]->setRawSamples(xVal2,yVal2[2],32);
-    Channels2[3]->setRawSamples(xVal2,yVal2[3],32);
-
-    Channels2[0]->setPen(QPen(Qt::red)); // Color de la curva
-    Channels2[1]->setPen(QPen(Qt::cyan));
-    Channels2[2]->setPen(QPen(Qt::yellow));
-    Channels2[3]->setPen(QPen(Qt::green));
-    m_Grid2 = new QwtPlotGrid();     // Rejilla de puntos
-    m_Grid2->attach(ui->Grafica_2);    // que se asocia al objeto QwtPl
-    ui->Grafica_2->setAutoReplot(false); //Desactiva el autoreplot (mejora la eficiencia)
-    //Semana 2. FIN Inicializacion GRAFICA
-
 }
 
 MainUserGUI::~MainUserGUI() // Destructor de la clase
@@ -168,6 +132,7 @@ void MainUserGUI::activateRunButton()
 //Esta función lo que hace es procesar dichos eventos
 void MainUserGUI::tivaStatusChanged(int status,QString message)
 {
+    ui->statusLabel->setText(message);
     switch (status)
     {
         case QTivaRPC::TivaConnected:
@@ -177,28 +142,28 @@ void MainUserGUI::tivaStatusChanged(int status,QString message)
             ui->runButton->setEnabled(false);
 
             // Se indica que se ha realizado la conexión en la etiqueta 'statusLabel'
-            ui->statusLabel->setText(tr("Ejecucion, conectado al puerto %1.")
+            ui->statusLabel->setText(tr("Running, connected to %1")
                              .arg(ui->serialPortComboBox->currentText()));
 
             //    // Y se habilitan los controles deshabilitados
             ui->pingButton->setEnabled(true);
-
         break;
-
         case QTivaRPC::TivaDisconnected:
-            //Caso desconectado..
-            // Rehabilito el boton de conectar
-            ui->runButton->setEnabled(false);
+            ui->runButton->setEnabled(true);
+        break;
+        case QTivaRPC::OpenPortError:
+            ui->statusLabel->setText(tr("Not running, can not open %1")
+                         .arg(ui->serialPortComboBox->currentText()));
         break;
         case QTivaRPC::UnexpectedPacketError:
         case QTivaRPC::FragmentedPacketError:
         case QTivaRPC::CRCorStuffError:
-            //Errores detectados en la recepcion de paquetes
             ui->statusLabel->setText(message);
         break;
         default:
-            //Otros errores (por ejemplo, abriendo el puerto)
+            ui->statusLabel->setText(tr("Not running, error not handled"));
             processError(tiva.getLastErrorMessage());
+        break;
     }
 }
 
@@ -206,7 +171,9 @@ void MainUserGUI::tivaStatusChanged(int status,QString message)
 // SLOT asociada a pulsación del botón RUN
 void MainUserGUI::on_runButton_clicked()
 {
-    //Intenta arrancar la comunicacion con la TIVA
+    ui->statusLabel->setText(tr("Connecting..."));
+    ui->statusLabel->repaint();
+    usleep(500*1000);
     tiva.startRPCClient( ui->serialPortComboBox->currentText());
 }
 
