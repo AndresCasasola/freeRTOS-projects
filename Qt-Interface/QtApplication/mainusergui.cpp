@@ -342,3 +342,11 @@ void MainUserGUI::on_checkBox_clicked(bool checked)
    tiva.ADCResolutionSend(checked);
 }
 
+
+void MainUserGUI::on_FrequencySlider_valueChanged(int value)
+{
+    QString num;
+    num.setNum(value, 10);
+    ui->FreqNumber->setText(num);
+    tiva.ADCFrequencySend((double)value);
+}

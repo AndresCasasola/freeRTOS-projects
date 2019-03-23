@@ -68,7 +68,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -318,42 +318,11 @@
       <string>Start ADC</string>
      </property>
     </widget>
-    <widget class="QwtKnob" name="ADCFrequency">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>510</x>
-       <y>253</y>
-       <width>171</width>
-       <height>181</height>
-      </rect>
-     </property>
-     <property name="lowerBound">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="upperBound">
-      <double>5000.000000000000000</double>
-     </property>
-     <property name="scaleMaxMajor">
-      <number>5</number>
-     </property>
-     <property name="scaleMaxMinor">
-      <number>4</number>
-     </property>
-     <property name="scaleStepSize">
-      <double>1000.000000000000000</double>
-     </property>
-     <property name="value">
-      <double>1000.000000000000000</double>
-     </property>
-    </widget>
     <widget class="QLineEdit" name="FreqNumber">
      <property name="geometry">
       <rect>
-       <x>390</x>
-       <y>323</y>
+       <x>470</x>
+       <y>290</y>
        <width>71</width>
        <height>28</height>
       </rect>
@@ -384,8 +353,8 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>390</x>
-       <y>363</y>
+       <x>450</x>
+       <y>370</y>
        <width>91</width>
        <height>20</height>
       </rect>
@@ -514,6 +483,22 @@
       <string>Unchecked: 12 bits</string>
      </property>
     </widget>
+    <widget class="QSlider" name="FrequencySlider">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>340</y>
+       <width>160</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>5000</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QLabel" name="label_12">
@@ -560,10 +545,10 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>77</x>
-     <y>40</y>
-     <width>64</width>
-     <height>27</height>
+     <x>84</x>
+     <y>45</y>
+     <width>51</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="text">
@@ -574,9 +559,9 @@
    <property name="geometry">
     <rect>
      <x>147</x>
-     <y>30</y>
+     <y>44</y>
      <width>341</width>
-     <height>51</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">

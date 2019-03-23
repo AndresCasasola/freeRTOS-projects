@@ -44,8 +44,8 @@ private slots:
     void ADC12SampleShow(PARAMETERS_ADC12_PACKET parametro);
     void on_ADCFrequency_valueChanged(double value);
     void on_checkBox_clicked(bool checked);
-
     void on_stopButton_clicked();
+    void on_FrequencySlider_valueChanged(int value);
 
 private:
     // funciones privadas
