@@ -254,6 +254,12 @@ void QTivaRPC::startRPCClient(QString puerto)
     connected=true;
 }
 
+void QTivaRPC::stopRPCClient(){
+    serial.close();
+    emit statusChanged(QTivaRPC::TivaDisconnected,QString(""));
+    connected=false;
+}
+
 //Método para leer el último mensaje de error
 QString QTivaRPC::getLastErrorMessage()
 {

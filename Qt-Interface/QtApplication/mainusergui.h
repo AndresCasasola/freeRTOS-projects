@@ -45,6 +45,8 @@ private slots:
     void on_ADCFrequency_valueChanged(double value);
     void on_checkBox_clicked(bool checked);
 
+    void on_stopButton_clicked();
+
 private:
     // funciones privadas
     void processError(const QString &s);

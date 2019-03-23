@@ -136,20 +136,17 @@ void MainUserGUI::tivaStatusChanged(int status,QString message)
     switch (status)
     {
         case QTivaRPC::TivaConnected:
-
-            //Caso conectado..
-            // Deshabilito el boton de conectar
             ui->runButton->setEnabled(false);
-
-            // Se indica que se ha realizado la conexión en la etiqueta 'statusLabel'
+            ui->stopButton->setEnabled(true);
+            ui->pingButton->setEnabled(true);
             ui->statusLabel->setText(tr("Running, connected to %1")
                              .arg(ui->serialPortComboBox->currentText()));
-
-            //    // Y se habilitan los controles deshabilitados
-            ui->pingButton->setEnabled(true);
         break;
         case QTivaRPC::TivaDisconnected:
             ui->runButton->setEnabled(true);
+            ui->stopButton->setEnabled(false);
+            ui->pingButton->setEnabled(false);
+            ui->statusLabel->setText(tr("Sleeping"));
         break;
         case QTivaRPC::OpenPortError:
             ui->statusLabel->setText(tr("Not running, can not open %1")
@@ -175,6 +172,14 @@ void MainUserGUI::on_runButton_clicked()
     ui->statusLabel->repaint();
     usleep(500*1000);
     tiva.startRPCClient( ui->serialPortComboBox->currentText());
+}
+
+void MainUserGUI::on_stopButton_clicked()
+{
+    ui->statusLabel->setText(tr("Stopping..."));
+    ui->statusLabel->repaint();
+    usleep(500*1000);
+    tiva.stopRPCClient();
 }
 
 void MainUserGUI::cambiaLEDs(void)
@@ -336,5 +341,4 @@ void MainUserGUI::on_checkBox_clicked(bool checked)
 {
    tiva.ADCResolutionSend(checked);
 }
-
 
