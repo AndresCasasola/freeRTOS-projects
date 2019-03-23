@@ -16,7 +16,7 @@ MainUserGUI::MainUserGUI(QWidget *parent) :  // Constructor de la clase
   , transactionCount(0)
 {
     ui->setupUi(this);                // Conecta la clase con su interfaz gráfico.
-    setWindowTitle(tr("Interfaz de Control TIVA")); // Título de la ventana
+    setWindowTitle(tr("Tivaia")); // Título de la ventana
 
     // Inicializa la lista de puertos serie
     ui->serialPortComboBox->clear(); // Vacía de componentes la comboBox

@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/new/images">
-        <file>logo.png</file>
+        <file>tivaia.png</file>
     </qresource>
 </RCC>
