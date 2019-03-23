@@ -38,9 +38,9 @@ MainUserGUI::MainUserGUI(QWidget *parent) :  // Constructor de la clase
 
     //Inicializa la ventana de PopUp que se muestra cuando llega la respuesta al PING
     ventanaPopUp.setIcon(QMessageBox::Information);
-    ventanaPopUp.setText(tr("Status: RESPUESTA A PING RECIBIDA")); //Este es el texto que muestra la ventana
+    ventanaPopUp.setText(tr("Ping response received!")); //Este es el texto que muestra la ventana
     ventanaPopUp.setStandardButtons(QMessageBox::Ok);
-    ventanaPopUp.setWindowTitle(tr("Evento"));
+    ventanaPopUp.setWindowTitle(tr("Event"));
     ventanaPopUp.setParent(this,Qt::Popup);
 
     //Conexion de signals de los widgets del interfaz con slots propios de este objeto
@@ -66,9 +66,9 @@ MainUserGUI::MainUserGUI(QWidget *parent) :  // Constructor de la clase
     connect(ui->ADCCheck,SIGNAL(toggled(bool)),&tiva,SLOT(switchADC(bool)));
 
     //Semana 2. Inicializacion GRAFICA
-    ui->Grafica->setTitle("Osciloscopio"); // Titulo de la grafica
-    ui->Grafica->setAxisTitle(QwtPlot::xBottom, "Muestras"); // Etiqueta eje X de coordenadas
-    ui->Grafica->setAxisTitle(QwtPlot::yLeft, "Tension");    // Etiqueta eje Y de coordenadas
+    ui->Grafica->setTitle("Oscilloscope"); // Titulo de la grafica
+    ui->Grafica->setAxisTitle(QwtPlot::xBottom, "Samples"); // Etiqueta eje X de coordenadas
+    ui->Grafica->setAxisTitle(QwtPlot::yLeft, "Voltage");    // Etiqueta eje Y de coordenadas
     //ui->Grafica->axisAutoScale(true); // Con Autoescala
     ui->Grafica->setAxisScale(QwtPlot::yLeft, 0, 3.3); // Escala fija
     ui->Grafica->setAxisScale(QwtPlot::xBottom,0,999);
