@@ -285,6 +285,23 @@ void MainUserGUI::ADC12SampleShow(PARAMETERS_ADC12_PACKET parametro){
 //ESPECIFICACION 2. Mostrar los valores ADC
 void MainUserGUI::ADC8SampleShow(PARAMETERS_ADC8_PACKET parametro){
 
+    // Write value on file
+    if (file != NULL){
+        ui->statusLabelCap->setText(tr("Capturing 8bits samples"));
+        uint8_t *data;
+        data = parametro.chan3;
+        for(int i=0; i<8; i++)
+        {
+            bytes_writen = fprintf(file, "%d\n", (uint32_t)parametro.chan3[i]);
+            if(bytes_writen < 0)
+            {
+                printf("write");
+                fflush(stdout);
+                ui->statusLabelCap->setText(tr("Writing error"));
+            }
+        }
+    }
+
     for(int i=0;i<(1000-8);i++){
         yVal[0][i]=yVal[0][i+8];
         yVal[1][i]=yVal[1][i+8];
@@ -349,4 +366,22 @@ void MainUserGUI::on_FrequencySlider_valueChanged(int value)
     num.setNum(value, 10);
     ui->FreqNumber->setText(num);
     tiva.ADCFrequencySend((double)value);
+}
+
+void MainUserGUI::on_StartCapButton_clicked()
+{
+    file = fopen(filename, "w+");
+    if(file == NULL){
+        perror("open output file");
+        fflush(stdout);
+    }else{
+        ui->statusLabelCap->setText(tr("Ready"));
+    }
+}
+
+void MainUserGUI::on_EndCapButton_clicked()
+{
+    fclose(file);
+    file = NULL;
+    ui->statusLabelCap->setText(tr("Closed"));
 }

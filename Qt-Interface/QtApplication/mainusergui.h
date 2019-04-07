@@ -1,7 +1,15 @@
 #ifndef MAINUSERGUI_H
 #define MAINUSERGUI_H
 
+#include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include <QWidget>
 #include <QtSerialPort/qserialport.h>
 #include <QMessageBox>
@@ -47,6 +55,10 @@ private slots:
     void on_stopButton_clicked();
     void on_FrequencySlider_valueChanged(int value);
 
+    void on_StartCapButton_clicked();
+
+    void on_EndCapButton_clicked();
+
 private:
     // funciones privadas
     void processError(const QString &s);
@@ -59,18 +71,16 @@ private:
     QMessageBox ventanaPopUp;
     QTivaRPC tiva; //Objeto para gestionar la ejecucion acciones en el microcontrolador y/o recibir eventos desde él
 
-    //SEMANA2: Para las graficas
+    // Graphics
     double xVal[1000]; //valores eje X
     double yVal[4][1000]; //valores ejes Y
     QwtPlotCurve *Channels[4]; //Curvas
     QwtPlotGrid  *m_Grid; //Cuadricula
 
-    //Para la grafica de gestos
-    double xVal2[32]; //valores eje X
-    double yVal2[4][32]; //valores ejes Y
-    QwtPlotCurve *Channels2[4]; //Curvas
-    QwtPlotGrid  *m_Grid2; //Cuadricula
-
+    // ADC capture
+    FILE *file = NULL;
+    char *filename = "/home/andres/Desktop/datafile";
+    int bytes_writen=0;
 };
 
 #endif // GUIPANEL_H
